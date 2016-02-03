@@ -92,9 +92,6 @@ function setKing(name, socket) {
   } else if(name.length > 12) {
     socket.emit('news', 'Your name can\'t be more than 12 characters, greedyguts.');
     socket.superStrikes++;
-  } else if(name !== name.toUpperCase()) {
-    socket.emit('news', 'How did those lowercases get in there? Something\'s fishy...');
-    socket.superStrikes++;
   } else if(name === king.name) {
     socket.emit('news', 'You\'re already the king. Chill out!');
     socket.superStrikes += 0.5;

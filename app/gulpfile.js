@@ -128,11 +128,12 @@ gulp.task('svgs', [], function() {
 });
 
 gulp.task('extras', function() {
-  return gulp.src(paths.app.extras)
-    .pipe($.imagemin())
-    .pipe(gulp.dest(paths.dist.root))
-    .pipe($.size())
-    .pipe($.connect.reload())
+  // TODO(marcia): This task results in some errors, so commenting out for now.
+  // return gulp.src(paths.app.extras)
+  //   .pipe($.imagemin())
+  //   .pipe(gulp.dest(paths.dist.root))
+  //   .pipe($.size())
+  //   .pipe($.connect.reload())
 });
 
 gulp.task('clean_temp', ['scripts', 'html', 'images', 'svgs'], function () {

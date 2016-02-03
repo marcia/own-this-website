@@ -7,7 +7,7 @@ var Throne = React.createClass({
     this.props.onPageChange(page);
   },
   handleNameSubmit: function(name){
-    name = name.toUpperCase();
+    // name = name.toUpperCase();
     if (name !== this.props.name) {
       this.props.socket.emit('setKing', name);
     }
@@ -15,7 +15,7 @@ var Throne = React.createClass({
   render: function() {
     return (
       <div className="throne-page">
-        <h1>Owner of this website:</h1>
+        <h1>Where in the world is Marcia?</h1>
         <ThroneMid name={this.props.name} onNameSubmit={this.handleNameSubmit} />
         <p>{+this.props.initialScore + this.props.secondsElapsed}s</p>
         <PageLink onPageChange={this.handlePageChange} page="scores">High Scores</PageLink>
@@ -105,7 +105,7 @@ var ChallengerForm = React.createClass({
 
     return (
       <form className="challengerForm" onBlur={this.handleBlur} onSubmit={this.handleNameSubmit} ref="form" >
-        <input type="text" placeholder="Take it over" ref="challenger" value={this.state.value} onChange={this.handleChange} />
+        <input type="text" placeholder="Sharing is caring!" ref="challenger" value={this.state.value} onChange={this.handleChange} />
         <button type="submit" value="Go" onTouchStart={this.props.handleTouchSubmit} >
           <img src="img/crown.svg" alt="Crown" />
         </button>
