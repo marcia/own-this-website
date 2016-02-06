@@ -1,7 +1,7 @@
 var
 React = require('react/addons'),
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
-Page = require('./page.jsx');
+Throne = require('./throne.jsx');
 
 var UI = React.createClass({
   getInitialState: function() {
@@ -13,9 +13,7 @@ var UI = React.createClass({
       secondsElapsed: 0
     };
   },
-  tick: function() {
-    this.setState({secondsElapsed: this.state.secondsElapsed + 1});
-  },
+
   handlePageChange: function(page) {
     this.setState({ page: page });
   },
@@ -33,16 +31,17 @@ var UI = React.createClass({
       })(io.connect);
 
       this.socket = io.connect('http://' + this.props.socketUrl + ':' + this.props.socketPort);
-      this.socket.on('updateKing', (function (king) {
-        this.setState({kingName: king.name, kingScore: +king.score, secondsElapsed: 0});
+
+      this.socket.on('updatePerson', (function (person) {
+        var people = this.state.people;
+        people[person.key] = person;
+        this.setState({people: people});
       }).bind(this));
-      this.socket.on('updateKingInitial', (function (king) {
-        this.setState({kingName: king.name, kingScore: king.score, secondsElapsed: 0});
-        if(!this.timer) {
-          this.timer = setInterval(this.tick, 1000);
-          this.tick();
-        }
+
+      this.socket.on('updatePeopleInitial', (function (people) {
+        this.setState({people: people});
       }).bind(this));
+
     } else {
       throw new Error('window.location.hostname is ' + window.location.hostname +
         ' but we were expecting for it to be ' + this.props.cdnUrl +
@@ -50,14 +49,21 @@ var UI = React.createClass({
     }
   },
   render: function() {
+    var boxes = [];
+    if (this.state.people) {
+      for (personKey in this.state.people) {
+        var person = this.state.people[personKey];
+        boxes.push(<Throne
+          key={person.key}
+          name={person.name}
+          location={person.location}
+          socket={this.socket} />);
+      }
+    }
+
     return (
       <ReactCSSTransitionGroup transitionName="window" component={React.DOM.div}>
-        <Page key={this.state.page} onPageChange={this.handlePageChange} socket={this.socket} secondsElapsed={this.state.secondsElapsed} name={this.state.kingName}
-          pageSpecificScore={ this.state.page === 'throne'
-                      ? this.state.kingScore
-                      : this.state.scores
-          }
-        />
+        {boxes}
       </ReactCSSTransitionGroup>
     );
   }

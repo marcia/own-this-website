@@ -45,12 +45,11 @@ body, input, select, textarea, button
     &.window-leave-active
       left: 100%
 
-.throne-page, .score-page
+.throne-page,
+.score-page
   box-sizing: border-box
-  position: absolute
-  height: 100%
-  width: 100%
   border: 16px solid black
+  margin-bottom: 10px
   text-align: center
 
 .page-link
@@ -62,30 +61,25 @@ body, input, select, textarea, button
   color: white
   background: black
 
-h1, .mid, p
-  position: absolute
-  width: 100%
-
 h1
   $size: 42px
   top: 25%
   line-height: $size
-  margin-top: -$size / 2
   font-size: $size
   font-weight: normal
 
 .mid
-  $size: 120px
+  $size: 80px
   top: 50%
-  height: $size
   line-height: $size
-  margin-top: -$size / 2
+  margin: $size / 4
   font-size: $size
+  text-transform: uppercase
 
   h2
-    margin: 0
     font-size: 1em
     cursor: pointer
+    margin: 0
 
   form
     input, button
@@ -98,7 +92,7 @@ h1
 
     input
       min-width: 400px
-      padding-left: 48px
+      text-align: center
 
     ::placeholder
       text-transform: none
@@ -119,7 +113,6 @@ h1
   $size: 42px
   top: 75%
   line-height: $size
-  margin-top: -$size / 2
   font-size: $size
 
 table

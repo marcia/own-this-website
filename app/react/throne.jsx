@@ -6,18 +6,19 @@ var Throne = React.createClass({
   handlePageChange: function(page) {
     this.props.onPageChange(page);
   },
-  handleNameSubmit: function(name){
-    // name = name.toUpperCase();
-    if (name !== this.props.name) {
-      this.props.socket.emit('setKing', name);
+
+  handleLocationSubmit: function(location){
+    if (location !== this.props.location) {
+      this.props.socket.emit('setPerson', this.props.key, location);
     }
   },
+
   render: function() {
     return (
       <div className="throne-page">
-        <h1>Where in the world is Marcia?</h1>
-        <ThroneMid name={this.props.name} onNameSubmit={this.handleNameSubmit} />
-        <p>{+this.props.initialScore + this.props.secondsElapsed}s</p>
+        <h1>{this.props.name}</h1>
+        <ThroneMid location={this.props.location}
+          onLocationSubmit={this.handleLocationSubmit} />
         <PageLink onPageChange={this.handlePageChange} page="scores">High Scores</PageLink>
       </div>
     );
@@ -28,10 +29,12 @@ var ThroneMid = React.createClass({
   getInitialState: function() {
     return { formVisible: 0 };
   },
-  handleNameSubmit: function(name) {
+
+  handleLocationSubmit: function(location) {
     this.toggleFormDisplay();
-    this.props.onNameSubmit(name);
+    this.props.onLocationSubmit(location);
   },
+
   handleBlur: function(element) {
     //jumping through hoops because blur event might trigger
     //before submit, which kills the form when the submit
@@ -42,19 +45,17 @@ var ThroneMid = React.createClass({
       }
     }.bind(this), 1);
   },
-  handleTouchSubmit: function() {
-    //unfortunate hack
-    setTimeout(this.toggleFormDisplay, 1000);
-  },
+
   toggleFormDisplay: function() {
     this.setState({ formVisible: 1 - this.state.formVisible });
   },
+
   render: function() {
     return (
       <div className="mid">
         { this.state.formVisible
-          ? <ChallengerForm onNameSubmit={this.handleNameSubmit} handleBlur={this.handleBlur} handleTouchSubmit={this.handleTouchSubmit} />
-          : <h2 onClick={this.toggleFormDisplay}>{this.props.name}</h2>
+          ? <ChallengerForm onLocationSubmit={this.handleLocationSubmit} handleBlur={this.handleBlur} />
+          : <h2 onClick={this.toggleFormDisplay}>{this.props.location}</h2>
         }
       </div>
     );
@@ -89,26 +90,23 @@ var ChallengerForm = React.createClass({
     this.props.handleBlur(this.refs.form.getDOMNode());
   },
   handleChange: function(event) {
-    this.setState({value: event.target.value.substr(0, 12)});
+    this.setState({value: event.target.value.substr(0, 20)});
   },
-  handleNameSubmit: function() {
+  handleLocationSubmit: function() {
     var challengerNode = this.refs.challenger.getDOMNode();
     var challenger = challengerNode.value.trim();
     if (!challenger || typeof challenger !== 'string') {
       return false;
     }
-    this.props.onNameSubmit(challenger);
+    this.props.onLocationSubmit(challenger);
     this.refs.challenger.getDOMNode().value = '';
     return false;
   },
   render: function() {
 
     return (
-      <form className="challengerForm" onBlur={this.handleBlur} onSubmit={this.handleNameSubmit} ref="form" >
+      <form className="challengerForm" onBlur={this.handleBlur} onSubmit={this.handleLocationSubmit} ref="form" >
         <input type="text" placeholder="Sharing is caring!" ref="challenger" value={this.state.value} onChange={this.handleChange} />
-        <button type="submit" value="Go" onTouchStart={this.props.handleTouchSubmit} >
-          <img src="img/crown.svg" alt="Crown" />
-        </button>
       </form>
     );
   }
