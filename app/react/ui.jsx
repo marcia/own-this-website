@@ -38,7 +38,7 @@ var UI = React.createClass({
         this.setState({people: people});
       }).bind(this));
 
-      this.socket.on('updatePeopleInitial', (function (people) {
+      this.socket.on('updatePeople', (function (people) {
         this.setState({people: people});
       }).bind(this));
 

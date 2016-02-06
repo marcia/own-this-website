@@ -17,9 +17,16 @@ var Throne = React.createClass({
     }
   },
 
+  handleRemovePersonClick: function() {
+    this.props.socket.emit('removePerson', this.props.key);
+  },
+
   render: function() {
     return (
       <div className="throne-page">
+        {/* TODO(marcia): This is not accessible at ALL! Noooo */}
+        <a className='page-link' onClick={this.handleRemovePersonClick.bind(this)}>Remove</a>
+
         <h1>{this.props.name}</h1>
         <ThroneMid location={this.props.location}
           onLocationSubmit={this.handleLocationSubmit} />

@@ -24,7 +24,7 @@ var officialScoreKeeper = setInterval(function() {
 
   // Start a synchronized timer for all the new connections
   while(i--) {
-    newConnections.pop().emit('updatePeopleInitial', people);
+    newConnections.pop().emit('updatePeople', people);
   }
 
   // Clear the spam checker
@@ -50,6 +50,11 @@ function addPerson(name, socket) {
 
   // Then set their location to some default
   setPerson(name, 'in the office', socket);
+}
+
+function removePerson(key, socket) {
+  delete people[key];
+  io.sockets.emit('updatePeople', people);
 }
 
 function setPerson(key, location, socket) {
@@ -109,5 +114,9 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('addPerson', function(name) {
     addPerson(name, socket);
+  });
+
+  socket.on('removePerson', function(key) {
+    removePerson(key, socket);
   });
 });
