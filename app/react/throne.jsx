@@ -1,7 +1,11 @@
 var React = require('react/addons');
-var Shared = require('./shared.jsx');
-var PageLink = Shared.PageLink;
 
+/**
+ * Originally, this was a "throne" because there was a king / owner of the
+ * website, where each ruler just kicked the previous ones out. Now, it isn't
+ * a throne so much as "card" that shows a person's name and location.
+ * TODO(marcia): Rename to something more appropriate.
+ */
 var Throne = React.createClass({
   handlePageChange: function(page) {
     this.props.onPageChange(page);
@@ -19,7 +23,6 @@ var Throne = React.createClass({
         <h1>{this.props.name}</h1>
         <ThroneMid location={this.props.location}
           onLocationSubmit={this.handleLocationSubmit} />
-        <PageLink onPageChange={this.handlePageChange} page="scores">High Scores</PageLink>
       </div>
     );
   }

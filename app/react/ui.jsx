@@ -1,7 +1,7 @@
-var
-React = require('react/addons'),
-ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
-Throne = require('./throne.jsx');
+var React = require('react/addons');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+var Throne = require('./throne.jsx');
 
 var UI = React.createClass({
   getInitialState: function() {
@@ -48,6 +48,29 @@ var UI = React.createClass({
         '. Change the value of cdnUrl in /app/js/main.jsx to the correct hostname.');
     }
   },
+
+  handleAddPersonClick: function() {
+    var name = prompt('What\'s your name?');
+
+    if (!name) {
+      // If they didn't type anything, return!
+      return;
+    }
+
+    if (this.state.people[name]) {
+      // If we already have this person on the board, return!
+      // TODO(marcia): Consider showing an error message
+      return;
+    }
+
+    // TODO(marcia): Do more validation things. Reject duplicate names
+    // regardless of case and punctuation maybe, sanitize, trim, etc.
+
+    // TODO(marcia): This might add the person somewhere random. Tweak so
+    // everything is more compact and readable for these purposes.
+    this.socket.emit('addPerson', name);
+  },
+
   render: function() {
     var boxes = [];
     if (this.state.people) {
@@ -63,6 +86,10 @@ var UI = React.createClass({
 
     return (
       <ReactCSSTransitionGroup transitionName="window" component={React.DOM.div}>
+        <a className="page-link" onClick={this.handleAddPersonClick.bind(this)}>
+          Add yourself!
+        </a>
+
         {boxes}
       </ReactCSSTransitionGroup>
     );

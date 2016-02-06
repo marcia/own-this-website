@@ -40,6 +40,18 @@ function changedStoredPerson(key, location) {
   io.sockets.emit('updatePerson', person);
 }
 
+function addPerson(name, socket) {
+  // Add the person to the people object
+  people[name] = {
+    // TODO(marcia): key should be something else, but can be name for now
+    'key': name,
+    'name': name
+  };
+
+  // Then set their location to some default
+  setPerson(name, 'in the office', socket);
+}
+
 function setPerson(key, location, socket) {
   var score;
   var ipSpamCount = ipSpamChecker[socket.ipAddress];
@@ -94,7 +106,8 @@ io.sockets.on('connection', function(socket) {
   socket.on('setPerson', function(key, location) {
     setPerson(key, location, socket);
   });
-  socket.on('getHighScores', function() {
-    getHighScores(socket);
+
+  socket.on('addPerson', function(name) {
+    addPerson(name, socket);
   });
 });
